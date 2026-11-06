@@ -255,24 +255,70 @@ Notes for running tests:
 
 ## Build and install
 
-Against an existing TRIQS 4.0 (here `$HOME/triqs4`, built with g++-14), into its own prefix, so
-that the stock cthyb install is not touched:
+**Requirements:** the same as upstream cthyb 4.0. You need an installed TRIQS 4.0.x, CMake ≥ 3.22,
+the C++20 compiler and Python that TRIQS was built with, and network access at configure time.
+The configure step downloads two build dependencies, c2py and GoogleTest (see Offline builds below).
+
+Throughout, `$TRIQS_PREFIX` is the TRIQS installation prefix and `$PREFIX` is where this fork goes.
+To keep a stock cthyb next to it, use a separate `$PREFIX`. If you leave out
+`CMAKE_INSTALL_PREFIX`, the fork is installed into the TRIQS prefix and replaces any cthyb there.
 
 ```bash
-source $HOME/triqs4/share/triqs/triqsvars.sh
-cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=g++-14 \
-      -DCMAKE_PREFIX_PATH=$HOME/triqs4 -DCMAKE_INSTALL_PREFIX=$PWD/install -DBuild_Tests=ON
-cmake --build build -j 6        # ~2 GB of memory per compile job
-ctest --test-dir build -j 4 --output-on-failure
-cmake --install build
-export PYTHONPATH=$PWD/install/lib/python3.12/site-packages:$PYTHONPATH    # after triqsvars.sh
-python -c "import triqs_cthyb; print(triqs_cthyb.__file__)"                 # check which cthyb is used
+source $TRIQS_PREFIX/share/triqs/triqsvars.sh          # sets TRIQS_ROOT, CMAKE_PREFIX_PATH, PYTHONPATH
+
+git clone -b windowed-moves <url of this repository> cthyb.src
+cmake -S cthyb.src -B cthyb.build \
+      -DCMAKE_BUILD_TYPE=Release \
+      -DCMAKE_CXX_COMPILER=<the compiler TRIQS was built with> \
+      -DCMAKE_INSTALL_PREFIX=$PREFIX
+cmake --build cthyb.build -j <N>                        # about 2 GB of memory per compile job
+ctest --test-dir cthyb.build -j <N> --output-on-failure
+cmake --install cthyb.build
 ```
 
-Use the same compiler and the same `Hybridisation_is_complex` / `Local_hamiltonian_is_complex`
-options as the TRIQS build. The Python bindings (`python/triqs_cthyb/solver_core.wrap.cxx`) were
-edited by hand for the new parameters. Do not configure with `-DUpdate_Python_Bindings=ON` unless
-clair is available; it regenerates them from the C++ headers.
+To find the compiler TRIQS was built with, run
+`grep TRIQS_CXX_COMPILER $TRIQS_PREFIX/lib/cmake/triqs/TRIQSConfig.cmake`.
+
+**Using it.** With a separate `$PREFIX`, source the environment script that the install writes. Do
+this *after* `triqsvars.sh`, so that the fork comes first on `PYTHONPATH`:
+
+```bash
+source $TRIQS_PREFIX/share/triqs/triqsvars.sh
+source $PREFIX/share/triqs_cthyb/triqs_cthybvars.sh
+python -c "import triqs_cthyb; print(triqs_cthyb.__file__)"   # check which cthyb is imported
+```
+
+In batch jobs, put the same two lines in the job script. MPI launchers normally pass the
+environment on to all ranks; if a rank still imports another cthyb, export `PYTHONPATH` explicitly
+(e.g. `mpirun -x PYTHONPATH` with Open MPI). Removing the second line switches back to the stock
+cthyb.
+
+**CMake options.** These are upstream's, unchanged:
+
+| option | default | meaning |
+|---|---|---|
+| `-DHybridisation_is_complex=ON` | OFF | allow a complex Δ(τ) |
+| `-DLocal_hamiltonian_is_complex=ON` | OFF | allow a complex H_loc |
+| `-DMeasureG2=ON` | OFF | two-particle measurements (needs NFFT) |
+| `-DBuild_Tests=OFF` | ON | skip the tests |
+
+If you replace an existing cthyb install, use the same complex options it was built with: scripts
+that pass complex Δ or H_loc need them. To read them back from that install, run
+`grep -o 'BOOL:[^>]*>:[A-Z_]*IS_COMPLEX' <its prefix>/lib/cmake/triqs_cthyb/triqs_cthyb-targets.cmake`,
+where `BOOL:>` means OFF and `BOOL:ON>` means ON. Build cthyb with the same compiler and flags as
+TRIQS (for example the same `-march`), and on hardware that can run them.
+
+**Python bindings.** `python/triqs_cthyb/solver_core.wrap.cxx` was edited by hand for the new
+parameters. Do not configure with `-DUpdate_Python_Bindings=ON`: that regenerates the bindings from
+the C++ headers, needs the clair tool, and is not required.
+
+**Offline builds** (e.g. compute nodes without internet). Clone the two dependencies into `deps/`
+beforehand; configure then uses them instead of downloading. The directory names must be exactly these:
+
+```bash
+git clone -b 0.9.x https://github.com/flatironinstitute/c2py cthyb.src/deps/c2py
+git clone https://github.com/google/googletest cthyb.src/deps/GTest
+```
 
 ---
 
