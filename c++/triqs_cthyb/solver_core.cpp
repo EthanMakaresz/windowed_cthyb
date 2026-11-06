@@ -34,6 +34,10 @@
 #include "./moves/remove.hpp"
 #include "./moves/double_insert.hpp"
 #include "./moves/double_remove.hpp"
+#include "./moves/insert_window.hpp"
+#include "./moves/remove_window.hpp"
+#include "./moves/double_insert_window.hpp"
+#include "./moves/double_remove_window.hpp"
 #include "./moves/shift.hpp"
 #include "./moves/global.hpp"
 #include "./measures/G_tau.hpp"
@@ -282,10 +286,53 @@ namespace triqs_cthyb {
       return (f != params.proposal_prob.end() ? f->second : 1.0);
     };
 
+    // Windowed mode: the windowed insert/remove moves replace the stock ones (see moves/window_util.hpp)
+    bool const is_master = (_comm.rank() == 0);
+    if (!params.windowed_moves) {
+      if (is_master && (params.window_half_width || params.window_double_half_width || params.window_double_min_distance))
+        std::cout << "WARNING: window_* parameters are ignored since windowed_moves = False.\n";
+    }
+    double window_w = 0, window_w4 = 0, window_dmin = 0;
+    if (params.windowed_moves) {
+      window_w = params.window_half_width.value_or(beta / 20);
+      if (is_master && !params.window_half_width)
+        std::cout << "WARNING: windowed_moves = True but window_half_width is not set; using the default beta/20 = " << window_w << ".\n";
+      window_w4   = params.window_double_half_width.value_or(window_w);
+      window_dmin = params.window_double_min_distance.value_or(beta / 4);
+      if (!(window_w > 0 && window_w <= 0.5 * beta))
+        TRIQS_RUNTIME_ERROR << "window_half_width = " << window_w << " must be in (0, beta/2], beta/2 = " << 0.5 * beta;
+      if (!(window_w4 > 0 && window_w4 <= 0.5 * beta))
+        TRIQS_RUNTIME_ERROR << "window_double_half_width = " << window_w4 << " must be in (0, beta/2], beta/2 = " << 0.5 * beta;
+      if (!(window_dmin >= 0 && window_dmin < 0.5 * beta))
+        TRIQS_RUNTIME_ERROR << "window_double_min_distance = " << window_dmin << " must be in [0, beta/2), beta/2 = " << 0.5 * beta;
+      if (params.verbosity >= 2) {
+        std::cout << "Windowed moves: window_half_width = " << window_w;
+        if (params.move_double)
+          std::cout << ", window_double_half_width = " << window_w4 << ", window_double_min_distance = " << window_dmin;
+        std::cout << std::endl;
+      }
+    }
+
     for (size_t block = 0; block < _Delta_tau.size(); ++block) {
       int block_size         = _Delta_tau[block].data().shape()[1];
       auto const &block_name = delta_names[block];
       double prop_prob       = get_prob_prop(block_name);
+      if (params.windowed_moves) {
+        inserts.add(move_insert_window(block, block_size, window_w, data, qmc.get_rng()), "Insert window Delta_" + block_name, prop_prob);
+        removes.add(move_remove_window(block, block_size, window_w, data, qmc.get_rng()), "Remove window Delta_" + block_name, prop_prob);
+        if (params.move_double) {
+          for (size_t block2 = 0; block2 < _Delta_tau.size(); ++block2) {
+            int block_size2         = _Delta_tau[block2].data().shape()[1];
+            auto const &block_name2 = delta_names[block2];
+            double prop_prob2       = get_prob_prop(block_name2);
+            double_inserts.add(move_insert_window_double(block, block2, block_size, block_size2, window_w4, window_dmin, data, qmc.get_rng()),
+                               "Insert window Delta_" + block_name + "_" + block_name2, prop_prob * prop_prob2);
+            double_removes.add(move_remove_window_double(block, block2, block_size, block_size2, window_w4, window_dmin, data, qmc.get_rng()),
+                               "Remove window Delta_" + block_name + "_" + block_name2, prop_prob * prop_prob2);
+          }
+        }
+        continue;
+      }
       inserts.add(move_insert_c_cdag(block, block_size, block_name, data, qmc.get_rng(), histo_map),
                   "Insert Delta_" + block_name, prop_prob);
       removes.add(move_remove_c_cdag(block, block_size, block_name, data, qmc.get_rng(), histo_map),

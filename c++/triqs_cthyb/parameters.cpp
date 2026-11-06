@@ -98,6 +98,10 @@ namespace triqs_cthyb {
 
     h5_write(grp, "move_shift", sp.move_shift);
     h5_write(grp, "move_double", sp.move_double);
+    h5_write(grp, "windowed_moves", sp.windowed_moves);
+    h5_write(grp, "window_half_width", sp.window_half_width);
+    h5_write(grp, "window_double_half_width", sp.window_double_half_width);
+    h5_write(grp, "window_double_min_distance", sp.window_double_min_distance);
     h5_write(grp, "use_trace_estimator", sp.use_trace_estimator);
 
     h5_write(grp, "measure_G_tau", sp.measure_G_tau);
@@ -165,6 +169,10 @@ namespace triqs_cthyb {
 
     h5_read(grp, "move_shift", sp.move_shift);
     h5_read(grp, "move_double", sp.move_double);
+    h5::try_read(grp, "windowed_moves", sp.windowed_moves);
+    h5::try_read(grp, "window_half_width", sp.window_half_width);
+    h5::try_read(grp, "window_double_half_width", sp.window_double_half_width);
+    h5::try_read(grp, "window_double_min_distance", sp.window_double_min_distance);
     h5_read(grp, "use_trace_estimator", sp.use_trace_estimator);
 
     h5_read(grp, "measure_G_tau", sp.measure_G_tau);

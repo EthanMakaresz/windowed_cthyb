@@ -1,0 +1,252 @@
+
+== diag / stock: {}
+  32 runs x 100000 cycles, wall 15.1 s/run, <order> 10.24, <sign> 1.000
+  chi2/dof vs ED = 1.22 (dof 9), max |z| = 1.78
+    n_up0       0.39665 +- 0.00057  ED  0.39689  z -0.42
+    n_up1       0.50845 +- 0.00077  ED  0.50803  z  0.55
+    n_down0     0.39782 +- 0.00055  ED  0.39689  z  1.69
+    n_down1     0.50740 +- 0.00080  ED  0.50803  z -0.79
+    docc_0      0.09299 +- 0.00025  ED  0.09259  z  1.62
+    docc_1      0.14741 +- 0.00037  ED  0.14772  z -0.84
+    spin_flip   0.03681 +- 0.00007  ED  0.03694  z -1.78
+    pair_hop   -0.01672 +- 0.00005  ED -0.01672  z  0.06
+    h_int       1.35109 +- 0.00129  ED  1.35016  z  0.72
+  flux balance (accepted insert / remove, z):  up_0 1111953/1112170 -0.1,  up_1 1182903/1183402 -0.3,  down_0 1112127/1111317 +0.5,  down_1 1182665/1181502 +0.8,  up_0_up_0 64072/64132 -0.2,  up_0_up_1 61174/60379 +2.3,  up_0_down_0 55873/56444 -1.7,  up_0_down_1 62456/62512 -0.2,  up_1_up_0 60678/60583 +0.3,  up_1_up_1 79799/80153 -0.9,  up_1_down_0 63074/62798 +0.8,  up_1_down_1 87476/87562 -0.2,  down_0_up_0 56065/55908 +0.5,  down_0_up_1 62578/62858 -0.8,  down_0_down_0 63721/63761 -0.1,  down_0_down_1 61023/60985 +0.1,  down_1_up_0 62945/63026 -0.2,  down_1_up_1 87401/86958 +1.1,  down_1_down_0 60441/60786 -1.0,  down_1_down_1 79526/80062 -1.3
+  move sets (acceptance, us per proposal):  Insert two operators: 0.1434, 2.23,  Remove two operators: 0.1434, 2.28,  Insert four operators: 0.0334, 2.29,  Remove four operators: 0.0334, 1.45,  Shift one operator: 0.6553, 5.78
+
+== diag / stock_nodouble: {'move_double': False}
+  32 runs x 100000 cycles, wall 17.6 s/run, <order> 10.24, <sign> 1.000
+  chi2/dof vs ED = 0.86 (dof 9), max |z| = 1.80
+    n_up0       0.39706 +- 0.00049  ED  0.39689  z  0.35
+    n_up1       0.50774 +- 0.00035  ED  0.50803  z -0.81
+    n_down0     0.39678 +- 0.00052  ED  0.39689  z -0.21
+    n_down1     0.50824 +- 0.00051  ED  0.50803  z  0.41
+    docc_0      0.09242 +- 0.00019  ED  0.09259  z -0.94
+    docc_1      0.14783 +- 0.00029  ED  0.14772  z  0.40
+    spin_flip   0.03705 +- 0.00008  ED  0.03694  z  1.49
+    pair_hop   -0.01679 +- 0.00004  ED -0.01672  z -1.80
+    h_int       1.34961 +- 0.00117  ED  1.35016  z -0.47
+  flux balance (accepted insert / remove, z):  up_0 1854359/1854342 +0.0,  up_1 1970588/1970608 -0.0,  down_0 1854623/1854624 -0.0,  down_1 1971572/1971528 +0.0
+  move sets (acceptance, us per proposal):  Insert two operators: 0.1435, 2.07,  Remove two operators: 0.1434, 2.25,  Shift one operator: 0.6550, 5.66
+
+== diag / W: {'windowed_moves': True, 'window_half_width': 1.0}
+  32 runs x 100000 cycles, wall 18.1 s/run, <order> 10.25, <sign> 1.000
+  chi2/dof vs ED = 0.66 (dof 9), max |z| = 1.45
+    n_up0       0.39639 +- 0.00052  ED  0.39689  z -0.95
+    n_up1       0.50879 +- 0.00076  ED  0.50803  z  1.01
+    n_down0     0.39645 +- 0.00064  ED  0.39689  z -0.68
+    n_down1     0.50737 +- 0.00077  ED  0.50803  z -0.85
+    docc_0      0.09258 +- 0.00025  ED  0.09259  z -0.06
+    docc_1      0.14784 +- 0.00049  ED  0.14772  z  0.24
+    spin_flip   0.03679 +- 0.00010  ED  0.03694  z -1.45
+    pair_hop   -0.01674 +- 0.00006  ED -0.01672  z -0.27
+    h_int       1.34912 +- 0.00137  ED  1.35016  z -0.76
+  flux balance (accepted insert / remove, z):  up_0 2610668/2610647 +0.0,  up_1 2262367/2262128 +0.1,  down_0 2613688/2610910 +1.2,  down_1 2262056/2261845 +0.1,  up_0_up_0 227966/226809 +1.7,  up_0_up_1 216887/216712 +0.3,  up_0_down_0 245372/246851 -2.1,  up_0_down_1 218767/219005 -0.4,  up_1_up_0 216934/217165 -0.4,  up_1_up_1 196845/197130 -0.5,  up_1_down_0 218742/219145 -0.6,  up_1_down_1 173126/172470 +1.1,  down_0_up_0 245169/245847 -1.0,  down_0_up_1 218681/218685 -0.0,  down_0_down_0 226994/227334 -0.5,  down_0_down_1 217062/216278 +1.2,  down_1_up_0 218364/218254 +0.2,  down_1_up_1 172796/172663 +0.2,  down_1_down_0 216405/216736 -0.5,  down_1_down_1 196065/196728 -1.1
+  move sets (acceptance, us per proposal):  Insert two operators: 0.3047, 3.26,  Remove two operators: 0.3046, 2.98,  Insert four operators: 0.1071, 3.03,  Remove four operators: 0.1071, 2.02,  Shift one operator: 0.6550, 5.87
+
+== diag / W_small: {'windowed_moves': True, 'window_half_width': 0.25}
+  32 runs x 100000 cycles, wall 14.7 s/run, <order> 10.25, <sign> 1.000
+  chi2/dof vs ED = 0.91 (dof 9), max |z| = 1.73
+    n_up0       0.39709 +- 0.00066  ED  0.39689  z  0.30
+    n_up1       0.50839 +- 0.00126  ED  0.50803  z  0.29
+    n_down0     0.39685 +- 0.00070  ED  0.39689  z -0.06
+    n_down1     0.50920 +- 0.00112  ED  0.50803  z  1.05
+    docc_0      0.09247 +- 0.00029  ED  0.09259  z -0.44
+    docc_1      0.14826 +- 0.00080  ED  0.14772  z  0.67
+    spin_flip   0.03720 +- 0.00016  ED  0.03694  z  1.69
+    pair_hop   -0.01667 +- 0.00008  ED -0.01672  z  0.66
+    h_int       1.35374 +- 0.00207  ED  1.35016  z  1.73
+  flux balance (accepted insert / remove, z):  up_0 2049476/2050034 -0.3,  up_1 1543426/1543799 -0.2,  down_0 2051049/2051504 -0.2,  down_1 1546518/1546410 +0.1,  up_0_up_0 103277/103127 +0.3,  up_0_up_1 103015/103100 -0.2,  up_0_down_0 137063/137232 -0.3,  up_0_down_1 105706/105725 -0.0,  up_1_up_0 102473/102540 -0.1,  up_1_up_1 61301/61660 -1.0,  up_1_down_0 105846/105102 +1.6,  up_1_down_1 64613/64445 +0.5,  down_0_up_0 137993/137538 +0.9,  down_0_up_1 104962/104827 +0.3,  down_0_down_0 103379/103596 -0.5,  down_0_down_1 103200/103357 -0.3,  down_1_up_0 105895/105766 +0.3,  down_1_up_1 64343/64155 +0.5,  down_1_down_0 102776/102906 -0.3,  down_1_down_1 61606/61753 -0.4
+  move sets (acceptance, us per proposal):  Insert two operators: 0.2247, 2.59,  Remove two operators: 0.2247, 1.98,  Insert four operators: 0.0490, 2.68,  Remove four operators: 0.0490, 0.61,  Shift one operator: 0.6552, 5.81
+
+== diag / W_4paths: {'windowed_moves': True, 'window_half_width': 1.0, 'window_double_half_width': 1.5, 'window_double_min_distance': 0.5}
+  32 runs x 100000 cycles, wall 18.3 s/run, <order> 10.24, <sign> 1.000
+  chi2/dof vs ED = 0.41 (dof 9), max |z| = 1.42
+    n_up0       0.39750 +- 0.00070  ED  0.39689  z  0.87
+    n_up1       0.50830 +- 0.00049  ED  0.50803  z  0.56
+    n_down0     0.39621 +- 0.00048  ED  0.39689  z -1.42
+    n_down1     0.50808 +- 0.00063  ED  0.50803  z  0.08
+    docc_0      0.09256 +- 0.00035  ED  0.09259  z -0.09
+    docc_1      0.14790 +- 0.00038  ED  0.14772  z  0.48
+    spin_flip   0.03693 +- 0.00008  ED  0.03694  z -0.02
+    pair_hop   -0.01675 +- 0.00006  ED -0.01672  z -0.49
+    h_int       1.35057 +- 0.00119  ED  1.35016  z  0.34
+  flux balance (accepted insert / remove, z):  up_0 2614158/2615357 -0.5,  up_1 2258930/2260104 -0.6,  down_0 2613662/2612930 +0.3,  down_1 2261315/2260382 +0.4,  up_0_up_0 194260/193578 +1.1,  up_0_up_1 182385/181921 +0.8,  up_0_down_0 197721/197536 +0.3,  up_0_down_1 184003/183421 +1.0,  up_1_up_0 182361/182265 +0.2,  up_1_up_1 193682/192559 +1.8,  up_1_down_0 184106/184375 -0.4,  up_1_down_1 155323/156647 -2.4,  down_0_up_0 196796/198102 -2.1,  down_0_up_1 183731/184044 -0.5,  down_0_down_0 194938/194232 +1.1,  down_0_down_1 183108/183188 -0.1,  down_1_up_0 183585/183776 -0.3,  down_1_up_1 156316/156019 +0.5,  down_1_down_0 182184/182537 -0.6,  down_1_down_1 193760/193697 +0.1
+  move sets (acceptance, us per proposal):  Insert two operators: 0.3046, 3.10,  Remove two operators: 0.3046, 3.22,  Insert four operators: 0.0921, 2.79,  Remove four operators: 0.0922, 2.26,  Shift one operator: 0.6549, 5.87
+
+== diag / W_nodouble: {'windowed_moves': True, 'window_half_width': 1.0, 'move_double': False}
+  32 runs x 100000 cycles, wall 20.9 s/run, <order> 10.24, <sign> 1.000
+  chi2/dof vs ED = 0.37 (dof 9), max |z| = 1.06
+    n_up0       0.39718 +- 0.00051  ED  0.39689  z  0.57
+    n_up1       0.50738 +- 0.00068  ED  0.50803  z -0.96
+    n_down0     0.39708 +- 0.00043  ED  0.39689  z  0.45
+    n_down1     0.50845 +- 0.00064  ED  0.50803  z  0.66
+    docc_0      0.09270 +- 0.00027  ED  0.09259  z  0.41
+    docc_1      0.14768 +- 0.00051  ED  0.14772  z -0.07
+    spin_flip   0.03702 +- 0.00008  ED  0.03694  z  1.06
+    pair_hop   -0.01674 +- 0.00006  ED -0.01672  z -0.30
+    h_int       1.35048 +- 0.00146  ED  1.35016  z  0.22
+  flux balance (accepted insert / remove, z):  up_0 4351337/4351323 +0.0,  up_1 3765922/3765937 -0.0,  down_0 4353432/4353424 +0.0,  down_1 3770131/3770116 +0.0
+  move sets (acceptance, us per proposal):  Insert two operators: 0.3045, 3.22,  Remove two operators: 0.3045, 2.93,  Shift one operator: 0.6548, 5.70
+
+== diag / W_noshift: {'windowed_moves': True, 'window_half_width': 1.0, 'move_shift': False}
+  32 runs x 100000 cycles, wall 15.0 s/run, <order> 10.26, <sign> 1.000
+  chi2/dof vs ED = 1.62 (dof 9), max |z| = 2.78
+    n_up0       0.39794 +- 0.00105  ED  0.39689  z  1.00
+    n_up1       0.50743 +- 0.00121  ED  0.50803  z -0.50
+    n_down0     0.39606 +- 0.00122  ED  0.39689  z -0.68
+    n_down1     0.50926 +- 0.00121  ED  0.50803  z  1.02
+    docc_0      0.09328 +- 0.00042  ED  0.09259  z  1.61
+    docc_1      0.14804 +- 0.00097  ED  0.14772  z  0.33
+    spin_flip   0.03654 +- 0.00014  ED  0.03694  z -2.78
+    pair_hop   -0.01682 +- 0.00011  ED -0.01672  z -0.95
+    h_int       1.35211 +- 0.00285  ED  1.35016  z  0.68
+  flux balance (accepted insert / remove, z):  up_0 3267247/3269526 -0.9,  up_1 2824532/2823761 +0.3,  down_0 3266889/3267738 -0.3,  down_1 2827087/2827746 -0.3,  up_0_up_0 285048/284748 +0.4,  up_0_up_1 270523/270181 +0.5,  up_0_down_0 308138/306177 +2.5,  up_0_down_1 273710/273669 +0.1,  up_1_up_0 270078/270610 -0.7,  up_1_up_1 245593/245588 +0.0,  up_1_down_0 273891/273723 +0.2,  up_1_down_1 216071/216225 -0.2,  down_0_up_0 307768/308740 -1.2,  down_0_up_1 272640/273320 -0.9,  down_0_down_0 284834/284185 +0.9,  down_0_down_1 270921/270348 +0.8,  down_1_up_0 273825/272983 +1.1,  down_1_up_1 216228/216141 +0.1,  down_1_down_0 270301/271818 -2.1,  down_1_down_1 246114/245719 +0.6
+  move sets (acceptance, us per proposal):  Insert two operators: 0.3047, 3.26,  Remove two operators: 0.3047, 3.03,  Insert four operators: 0.1071, 2.89,  Remove four operators: 0.1071, 1.93
+
+== diag / W_half: {'windowed_moves': True, 'window_half_width': 5.0, 'window_double_min_distance': 0.0}
+  32 runs x 100000 cycles, wall 15.6 s/run, <order> 10.24, <sign> 1.000
+  chi2/dof vs ED = 1.62 (dof 9), max |z| = 2.54
+    n_up0       0.39662 +- 0.00054  ED  0.39689  z -0.50
+    n_up1       0.50709 +- 0.00050  ED  0.50803  z -1.88
+    n_down0     0.39702 +- 0.00058  ED  0.39689  z  0.22
+    n_down1     0.50806 +- 0.00051  ED  0.50803  z  0.07
+    docc_0      0.09259 +- 0.00025  ED  0.09259  z -0.00
+    docc_1      0.14691 +- 0.00032  ED  0.14772  z -2.54
+    spin_flip   0.03697 +- 0.00011  ED  0.03694  z  0.34
+    pair_hop   -0.01669 +- 0.00004  ED -0.01672  z  0.62
+    h_int       1.34741 +- 0.00142  ED  1.35016  z -1.93
+  flux balance (accepted insert / remove, z):  up_0 1111959/1112124 -0.1,  up_1 1183827/1184412 -0.4,  down_0 1111960/1112812 -0.6,  down_1 1184254/1182823 +0.9,  up_0_up_0 74180/73819 +0.9,  up_0_up_1 60443/60329 +0.3,  up_0_down_0 55918/56229 -0.9,  up_0_down_1 62789/62738 +0.1,  up_1_up_0 60713/60570 +0.4,  up_1_up_1 119026/118755 +0.6,  up_1_down_0 62972/62643 +0.9,  up_1_down_1 86726/87571 -2.0,  down_0_up_0 56396/56373 +0.1,  down_0_up_1 62975/62763 +0.6,  down_0_down_0 74488/74246 +0.6,  down_0_down_1 60777/60812 -0.1,  down_1_up_0 62669/63237 -1.6,  down_1_up_1 87193/87097 +0.2,  down_1_down_0 60998/60842 +0.4,  down_1_down_1 118892/119043 -0.3
+  move sets (acceptance, us per proposal):  Insert two operators: 0.1435, 2.27,  Remove two operators: 0.1435, 2.15,  Insert four operators: 0.0365, 2.24,  Remove four operators: 0.0365, 2.03,  Shift one operator: 0.6550, 5.96
+
+== offdiag / stock: {}
+  32 runs x 100000 cycles, wall 11.0 s/run, <order> 10.02, <sign> 0.629
+  chi2/dof vs ED = 0.68 (dof 9), max |z| = 1.84
+    n_up0       0.42110 +- 0.00123  ED  0.42158  z -0.39
+    n_up1       0.48903 +- 0.00174  ED  0.48833  z  0.40
+    n_down0     0.42128 +- 0.00147  ED  0.42158  z -0.20
+    n_down1     0.48978 +- 0.00171  ED  0.48833  z  0.84
+    docc_0      0.10497 +- 0.00062  ED  0.10487  z  0.17
+    docc_1      0.11349 +- 0.00077  ED  0.11207  z  1.84
+    spin_flip   0.05061 +- 0.00051  ED  0.05042  z  0.37
+    pair_hop   -0.02067 +- 0.00039  ED -0.02058  z -0.23
+    h_int       1.31622 +- 0.00337  ED  1.31211  z  1.22
+  flux balance (accepted insert / remove, z):  up 1125750/1126024 -0.2,  down 1125725/1125475 +0.2,  up_up 102272/102442 -0.4,  up_down 88615/88616 -0.0,  down_up 89056/88437 +1.5,  down_down 101856/102292 -1.0
+  move sets (acceptance, us per proposal):  Insert two operators: 0.0704, 1.66,  Remove two operators: 0.0703, 1.65,  Insert four operators: 0.0119, 2.08,  Remove four operators: 0.0119, 1.44,  Shift one operator: 0.3667, 3.27
+
+== offdiag / stock_nodouble: {'move_double': False}
+  32 runs x 100000 cycles, wall 12.1 s/run, <order> 9.95, <sign> 0.853
+  chi2/dof vs ED = 1030.47 (dof 9), max |z| = 84.33
+    n_up0       0.41644 +- 0.00087  ED  0.42158  z -5.90
+    n_up1       0.48673 +- 0.00120  ED  0.48833  z -1.33
+    n_down0     0.41418 +- 0.00082  ED  0.42158  z -9.05
+    n_down1     0.48735 +- 0.00114  ED  0.48833  z -0.86
+    docc_0      0.10178 +- 0.00040  ED  0.10487  z -7.79
+    docc_1      0.11072 +- 0.00046  ED  0.11207  z -2.95
+    spin_flip   0.04260 +- 0.00018  ED  0.05042  z -43.67
+    pair_hop   -0.01455 +- 0.00007  ED -0.02058  z  84.33
+    h_int       1.29613 +- 0.00194  ED  1.31211  z -8.22
+  flux balance (accepted insert / remove, z):  up 1918559/1918561 -0.0,  down 1919890/1919882 +0.0
+  move sets (acceptance, us per proposal):  Insert two operators: 0.0720, 1.66,  Remove two operators: 0.0720, 1.76,  Shift one operator: 0.3731, 3.35
+
+== offdiag / W: {'windowed_moves': True, 'window_half_width': 1.0}
+  32 runs x 100000 cycles, wall 13.3 s/run, <order> 10.03, <sign> 0.629
+  chi2/dof vs ED = 0.54 (dof 9), max |z| = 1.42
+    n_up0       0.42104 +- 0.00105  ED  0.42158  z -0.51
+    n_up1       0.48928 +- 0.00144  ED  0.48833  z  0.66
+    n_down0     0.42099 +- 0.00114  ED  0.42158  z -0.51
+    n_down1     0.48719 +- 0.00147  ED  0.48833  z -0.77
+    docc_0      0.10463 +- 0.00068  ED  0.10487  z -0.34
+    docc_1      0.11218 +- 0.00084  ED  0.11207  z  0.13
+    spin_flip   0.05083 +- 0.00039  ED  0.05042  z  1.04
+    pair_hop   -0.02062 +- 0.00024  ED -0.02058  z -0.19
+    h_int       1.30914 +- 0.00209  ED  1.31211  z -1.42
+  flux balance (accepted insert / remove, z):  up 2783342/2783331 +0.0,  down 2784588/2781374 +1.4,  up_up 323365/322554 +1.0,  up_down 356678/357097 -0.5,  down_up 356162/357401 -1.5,  down_down 322261/323028 -1.0
+  move sets (acceptance, us per proposal):  Insert two operators: 0.1740, 2.42,  Remove two operators: 0.1739, 2.01,  Insert four operators: 0.0424, 2.67,  Remove four operators: 0.0425, 1.79,  Shift one operator: 0.3669, 3.43
+
+== offdiag / W_small: {'windowed_moves': True, 'window_half_width': 0.25}
+  32 runs x 100000 cycles, wall 11.8 s/run, <order> 10.03, <sign> 0.628
+  chi2/dof vs ED = 1.37 (dof 9), max |z| = 2.37
+    n_up0       0.42340 +- 0.00125  ED  0.42158  z  1.46
+    n_up1       0.48840 +- 0.00244  ED  0.48833  z  0.03
+    n_down0     0.42248 +- 0.00160  ED  0.42158  z  0.56
+    n_down1     0.48742 +- 0.00214  ED  0.48833  z -0.42
+    docc_0      0.10661 +- 0.00074  ED  0.10487  z  2.37
+    docc_1      0.11219 +- 0.00097  ED  0.11207  z  0.12
+    spin_flip   0.05040 +- 0.00055  ED  0.05042  z -0.05
+    pair_hop   -0.02051 +- 0.00041  ED -0.02058  z  0.16
+    h_int       1.31897 +- 0.00343  ED  1.31211  z  2.00
+  flux balance (accepted insert / remove, z):  up 2934772/2933274 +0.6,  down 2938966/2938388 +0.2,  up_up 300887/300654 +0.3,  up_down 339995/340679 -0.8,  down_up 339312/340599 -1.6,  down_down 301815/301118 +0.9
+  move sets (acceptance, us per proposal):  Insert two operators: 0.1836, 2.36,  Remove two operators: 0.1835, 1.76,  Insert four operators: 0.0401, 2.52,  Remove four operators: 0.0401, 0.86,  Shift one operator: 0.3667, 3.56
+
+== offdiag / W_4paths: {'windowed_moves': True, 'window_half_width': 1.0, 'window_double_half_width': 1.5, 'window_double_min_distance': 0.5}
+  32 runs x 100000 cycles, wall 13.4 s/run, <order> 10.02, <sign> 0.628
+  chi2/dof vs ED = 0.91 (dof 9), max |z| = 1.68
+    n_up0       0.42062 +- 0.00123  ED  0.42158  z -0.78
+    n_up1       0.48594 +- 0.00142  ED  0.48833  z -1.68
+    n_down0     0.42201 +- 0.00113  ED  0.42158  z  0.38
+    n_down1     0.49026 +- 0.00164  ED  0.48833  z  1.18
+    docc_0      0.10441 +- 0.00053  ED  0.10487  z -0.86
+    docc_1      0.11188 +- 0.00079  ED  0.11207  z -0.24
+    spin_flip   0.05079 +- 0.00037  ED  0.05042  z  0.97
+    pair_hop   -0.02047 +- 0.00024  ED -0.02058  z  0.45
+    h_int       1.30905 +- 0.00270  ED  1.31211  z -1.13
+  flux balance (accepted insert / remove, z):  up 2786540/2785542 +0.4,  down 2783863/2784372 -0.2,  up_up 299706/299599 +0.1,  up_down 295365/296026 -0.9,  down_up 296108/296683 -0.7,  down_down 301053/300195 +1.1
+  move sets (acceptance, us per proposal):  Insert two operators: 0.1741, 2.34,  Remove two operators: 0.1740, 2.16,  Insert four operators: 0.0372, 2.69,  Remove four operators: 0.0373, 1.90,  Shift one operator: 0.3665, 3.42
+
+== offdiag / W_nodouble: {'windowed_moves': True, 'window_half_width': 1.0, 'move_double': False}
+  32 runs x 100000 cycles, wall 14.3 s/run, <order> 9.95, <sign> 0.851
+  chi2/dof vs ED = 633.53 (dof 9), max |z| = 60.64
+    n_up0       0.41398 +- 0.00078  ED  0.42158  z -9.73
+    n_up1       0.48662 +- 0.00120  ED  0.48833  z -1.43
+    n_down0     0.41535 +- 0.00099  ED  0.42158  z -6.29
+    n_down1     0.48766 +- 0.00125  ED  0.48833  z -0.54
+    docc_0      0.10123 +- 0.00040  ED  0.10487  z -9.20
+    docc_1      0.11065 +- 0.00064  ED  0.11207  z -2.23
+    spin_flip   0.04257 +- 0.00019  ED  0.05042  z -41.49
+    pair_hop   -0.01460 +- 0.00010  ED -0.02058  z  60.64
+    h_int       1.29422 +- 0.00204  ED  1.31211  z -8.76
+  flux balance (accepted insert / remove, z):  up 4628888/4628899 -0.0,  down 4631412/4631432 -0.0
+  move sets (acceptance, us per proposal):  Insert two operators: 0.1736, 2.35,  Remove two operators: 0.1736, 2.18,  Shift one operator: 0.3729, 3.48
+
+== offdiag / W_noshift: {'windowed_moves': True, 'window_half_width': 1.0, 'move_shift': False}
+  32 runs x 100000 cycles, wall 11.8 s/run, <order> 10.03, <sign> 0.627
+  chi2/dof vs ED = 1.54 (dof 9), max |z| = 2.46
+    n_up0       0.41990 +- 0.00153  ED  0.42158  z -1.10
+    n_up1       0.48506 +- 0.00204  ED  0.48833  z -1.60
+    n_down0     0.42270 +- 0.00175  ED  0.42158  z  0.64
+    n_down1     0.49103 +- 0.00178  ED  0.48833  z  1.52
+    docc_0      0.10456 +- 0.00063  ED  0.10487  z -0.48
+    docc_1      0.11261 +- 0.00090  ED  0.11207  z  0.59
+    spin_flip   0.05006 +- 0.00043  ED  0.05042  z -0.85
+    pair_hop   -0.02006 +- 0.00021  ED -0.02058  z  2.46
+    h_int       1.31246 +- 0.00391  ED  1.31211  z  0.09
+  flux balance (accepted insert / remove, z):  up 3479658/3479390 +0.1,  down 3484182/3481959 +0.8,  up_up 403037/404194 -1.3,  up_down 446793/445602 +1.3,  down_up 447628/446770 +0.9,  down_down 403071/405208 -2.4
+  move sets (acceptance, us per proposal):  Insert two operators: 0.1741, 2.27,  Remove two operators: 0.1740, 2.27,  Insert four operators: 0.0425, 2.43,  Remove four operators: 0.0425, 1.66
+
+== offdiag / W_half: {'windowed_moves': True, 'window_half_width': 5.0, 'window_double_min_distance': 0.0}
+  32 runs x 100000 cycles, wall 11.6 s/run, <order> 10.02, <sign> 0.629
+  chi2/dof vs ED = 0.42 (dof 9), max |z| = 1.63
+    n_up0       0.42096 +- 0.00108  ED  0.42158  z -0.57
+    n_up1       0.48774 +- 0.00181  ED  0.48833  z -0.33
+    n_down0     0.42081 +- 0.00133  ED  0.42158  z -0.58
+    n_down1     0.48844 +- 0.00159  ED  0.48833  z  0.07
+    docc_0      0.10459 +- 0.00058  ED  0.10487  z -0.47
+    docc_1      0.11198 +- 0.00067  ED  0.11207  z -0.14
+    spin_flip   0.05030 +- 0.00041  ED  0.05042  z -0.30
+    pair_hop   -0.02062 +- 0.00030  ED -0.02058  z -0.13
+    h_int       1.30818 +- 0.00241  ED  1.31211  z -1.63
+  flux balance (accepted insert / remove, z):  up 1124852/1125626 -0.5,  down 1125835/1124930 +0.6,  up_up 116265/115713 +1.1,  up_down 89056/89039 +0.0,  down_up 88580/88895 -0.7,  down_down 115697/116005 -0.6
+  move sets (acceptance, us per proposal):  Insert two operators: 0.0703, 1.87,  Remove two operators: 0.0703, 1.67,  Insert four operators: 0.0128, 2.38,  Remove four operators: 0.0128, 1.62,  Shift one operator: 0.3667, 3.20
+
+== W_half (w = beta/2, d_min = 0) vs stock: acceptance ratio, time-per-proposal ratio
+  diag     Insert two operators     acc 1.001   time 1.019
+  diag     Remove two operators     acc 1.001   time 0.945
+  diag     Insert four operators    acc 1.093   time 0.977
+  diag     Remove four operators    acc 1.092   time 1.400
+  diag     Shift one operator       acc 0.999   time 1.030
+  offdiag  Insert two operators     acc 0.999   time 1.126
+  offdiag  Remove two operators     acc 1.000   time 1.016
+  offdiag  Insert four operators    acc 1.073   time 1.143
+  offdiag  Remove four operators    acc 1.073   time 1.120
+  offdiag  Shift one operator       acc 1.000   time 0.979

@@ -107,6 +107,18 @@ namespace triqs_cthyb {
     /// Add double insertions as a move?
     bool move_double = true;
 
+    /// Windowed mode: replace the stock insert/remove moves (two operators, and four operators if move_double) by windowed ones.
+    bool windowed_moves = false;
+
+    /// Windowed mode: half-width w of the window in which the c of an inserted pair is proposed around its c^dagger. Unset: beta/20 (with a warning).
+    std::optional<double> window_half_width = {};
+
+    /// Windowed mode: half-width of the window within each pair of the four-operator moves. Unset: window_half_width.
+    std::optional<double> window_double_half_width = {};
+
+    /// Windowed mode: minimum distance between the two c^dagger of a four-operator move within one block. Unset: beta/4.
+    std::optional<double> window_double_min_distance = {};
+
     /// Calculate the full trace or use an estimate?
     bool use_trace_estimator = false;
 

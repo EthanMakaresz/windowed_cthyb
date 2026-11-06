@@ -155,6 +155,10 @@ static int synth_constructor_1(PyObject *self, PyObject *args, PyObject *kwargs)
   de("verbosity", self_c.verbosity, true);
   de("move_shift", self_c.move_shift, true);
   de("move_double", self_c.move_double, true);
+  de("windowed_moves", self_c.windowed_moves, true);
+  de("window_half_width", self_c.window_half_width, true);
+  de("window_double_half_width", self_c.window_double_half_width, true);
+  de("window_double_min_distance", self_c.window_double_min_distance, true);
   de("use_trace_estimator", self_c.use_trace_estimator, true);
   de("measure_G_tau", self_c.measure_G_tau, true);
   de("measure_G_l", self_c.measure_G_l, true);
@@ -308,6 +312,14 @@ off_diag_threshold : {par_50}, default=0.0
 
 h_loc0 : {par_51}, default={}
 
+windowed_moves : {par_52}, default=false
+
+window_half_width : {par_53}, default={}
+
+window_double_half_width : {par_54}, default={}
+
+window_double_min_distance : {par_55}, default={}
+
 )DOC",
                       "par",
                       {c2py::python_typename<triqs_cthyb::many_body_op_t>(),
@@ -361,7 +373,11 @@ h_loc0 : {par_51}, default={}
                        c2py::python_typename<double>(),
                        c2py::python_typename<double>(),
                        c2py::python_typename<double>(),
-                       c2py::python_typename<std::optional<triqs_cthyb::many_body_op_t>>()});
+                       c2py::python_typename<std::optional<triqs_cthyb::many_body_op_t>>(),
+                       c2py::python_typename<bool>(),
+                       c2py::python_typename<std::optional<double>>(),
+                       c2py::python_typename<std::optional<double>>(),
+                       c2py::python_typename<std::optional<double>>()});
 
 // ----- Method table ----
 template <>
@@ -422,6 +438,10 @@ constexpr auto _c2py_doc_member_53 = R"DOC(Threshold for determinant precision w
 constexpr auto _c2py_doc_member_54 = R"DOC(Threshold for determinant precision error.)DOC";
 constexpr auto _c2py_doc_member_55 = R"DOC(Bound for the determinant matrix being singular (if :math:`< 0`, checks for subnormal numbers).)DOC";
 constexpr auto _c2py_doc_member_56 = R"DOC(Threshold below which off-diagonal components of :math:`h_{loc}` are set to zero.)DOC";
+constexpr auto _c2py_doc_member_windowed_moves = R"DOC(Windowed mode: replace the stock insert/remove moves (two operators, and four operators if move_double) by windowed ones.)DOC";
+constexpr auto _c2py_doc_member_window_half_width = R"DOC(Windowed mode: half-width w of the window in which the c of an inserted pair is proposed around its c^dagger. Unset: beta/20 (with a warning).)DOC";
+constexpr auto _c2py_doc_member_window_double_half_width = R"DOC(Windowed mode: half-width of the window within each pair of the four-operator moves. Unset: window_half_width.)DOC";
+constexpr auto _c2py_doc_member_window_double_min_distance = R"DOC(Windowed mode: minimum distance between the two c^dagger of a four-operator move within one block. Unset: beta/4.)DOC";
 constexpr auto _c2py_doc_member_57 = R"DOC(Quadratic part of the local Hamiltonian. Must be provided if the :math:`\Delta` interface is used.)DOC";
 static PyObject *prop_get_dict_1(PyObject *self, void *) {
   auto &self_c = *(((c2py::wrap<_c2py_cls_1> *)self)->_c);
@@ -440,6 +460,10 @@ static PyObject *prop_get_dict_1(PyObject *self, void *) {
   dic["verbosity"]                     = self_c.verbosity;
   dic["move_shift"]                    = self_c.move_shift;
   dic["move_double"]                   = self_c.move_double;
+  dic["windowed_moves"] = self_c.windowed_moves;
+  dic["window_half_width"] = self_c.window_half_width;
+  dic["window_double_half_width"] = self_c.window_double_half_width;
+  dic["window_double_min_distance"] = self_c.window_double_min_distance;
   dic["use_trace_estimator"]           = self_c.use_trace_estimator;
   dic["measure_G_tau"]                 = self_c.measure_G_tau;
   dic["measure_G_l"]                   = self_c.measure_G_l;
@@ -537,6 +561,10 @@ constinit PyGetSetDef c2py::tp_getset<_c2py_cls_1>[] = {
    c2py::getsetdef_from_member<&_c2py_cls_1::det_singular_threshold, _c2py_cls_1>("det_singular_threshold", _c2py_doc_member_55),
    c2py::getsetdef_from_member<&_c2py_cls_1::off_diag_threshold, _c2py_cls_1>("off_diag_threshold", _c2py_doc_member_56),
    c2py::getsetdef_from_member<&_c2py_cls_1::h_loc0, _c2py_cls_1>("h_loc0", _c2py_doc_member_57),
+   c2py::getsetdef_from_member<&_c2py_cls_1::windowed_moves, _c2py_cls_1>("windowed_moves", _c2py_doc_member_windowed_moves),
+   c2py::getsetdef_from_member<&_c2py_cls_1::window_half_width, _c2py_cls_1>("window_half_width", _c2py_doc_member_window_half_width),
+   c2py::getsetdef_from_member<&_c2py_cls_1::window_double_half_width, _c2py_cls_1>("window_double_half_width", _c2py_doc_member_window_double_half_width),
+   c2py::getsetdef_from_member<&_c2py_cls_1::window_double_min_distance, _c2py_cls_1>("window_double_min_distance", _c2py_doc_member_window_double_min_distance),
    {"__dict__", (getter)prop_get_dict_1, nullptr, "", nullptr},
    {nullptr, nullptr, nullptr, nullptr, nullptr}};
 

@@ -1,0 +1,52 @@
+/*******************************************************************************
+ *
+ * TRIQS: a Toolbox for Research in Interacting Quantum Systems
+ *
+ * TRIQS is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
+ *
+ ******************************************************************************/
+#pragma once
+#include <triqs/mc_tools.hpp>
+#include "../qmc_data.hpp"
+#include "./window_util.hpp"
+
+namespace triqs_cthyb {
+
+  // Insertion of two C^dagger, C pairs (windowed mode): (X, x) in block 1 and (Y, y) in block 2,
+  // x uniform in the window w4 of X and y uniform in the window w4 of Y. X is uniform on the circle.
+  //
+  // Different blocks: Y uniform on the circle. The move is two independent windowed pairs, one
+  // labelled path (the blocks tell the pairs apart), and with counts after the insertion
+  //     R = W(C')/W(C)  s1^2 s2^2 beta^2 L_w4^2 / (n1' m_x' n2' m_y'),
+  // m_x' (m_y') = number of C of block 1 (2) near X (Y). The sub-moves (b1, b2) and (b2, b1) are
+  // distinct, each balanced with its own reverse.
+  //
+  // Same block: Y uniform among the points farther than d_min from X, which keeps the rank-2 update
+  // of the det away from two nearby C^dagger. The proposal ratio is a sum over 4 labelled paths,
+  // derived in window_util.hpp (same_block_proposal_ratio).
+  //
+  // The reverse is move_remove_window_double.
+  class move_insert_window_double {
+
+    qmc_data &data;
+    configuration &config;
+    mc_tools::random_generator &rng;
+    int block_index1, block_index2, block_size1, block_size2;
+    window::window_t win;
+    window::distance_t dist;
+    h_scalar_t new_atomic_weight, new_atomic_reweighting;
+    time_pt tau1, tau2, tau3, tau4;
+    op_desc op1, op2, op3, op4;
+
+    public:
+    move_insert_window_double(int block_index1, int block_index2, int block_size1, int block_size2, double w4, double d_min, qmc_data &data,
+                              mc_tools::random_generator &rng);
+
+    mc_weight_t attempt();
+    mc_weight_t accept();
+    void reject();
+  };
+} // namespace triqs_cthyb
