@@ -14,9 +14,6 @@ Two commits on branch `windowed-moves`, on top of upstream `4.0.x`:
    `test/python/sigma_moments_offdiag.py`. Revert this commit once a 4.0.x release contains the fix.
 2. **Windowed moves**, described below.
 
-The remote of the upstream repository is called `upstream`. To publish this fork, create an empty
-repository on GitHub, then run `git remote add origin <url> && git push -u origin windowed-moves`.
-
 ---
 
 ## Windowed mode
