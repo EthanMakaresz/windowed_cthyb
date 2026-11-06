@@ -14,6 +14,12 @@ Two commits on branch `windowed-moves`, on top of upstream `4.0.x`:
    `test/python/sigma_moments_offdiag.py`. Revert this commit once a 4.0.x release contains the fix.
 2. **Windowed moves**, described below.
 
+**How much faster than stock?** On a realistic three-orbital Kanamori problem (the t2g bands of
+Sr2RuO4, with spin-flip and pair hopping), windowed mode cuts the CPU time per independent sample by
+1.3× at β = 10 and 17× at β = 200, the gain growing as ≈ β^0.9, with the cost per move included.
+See [`validation/speedup_sr2ruo4/`](validation/speedup_sr2ruo4/README.md) for the plot, the model,
+the method and the caveats; measured on G(β/2) directly, the gain is smaller (≈ 5–12× at β = 200).
+
 ---
 
 ## Windowed mode
@@ -241,6 +247,9 @@ ED, the per-sub-move flux balance and the acceptance, and measures the time per 
 single-orbital Hubbard impurity with U = 15, β = 40. The results of both are in
 [`validation/RESULTS.md`](validation/RESULTS.md). In short: every windowed variant agrees with ED,
 and on the U = 15 problem, w = 1.5 is 8.9× cheaper per independent sample than stock.
+[`validation/speedup_sr2ruo4/`](validation/speedup_sr2ruo4/README.md) measures the speedup over
+stock against temperature, β = 10 … 200, on a three-orbital Sr2RuO4 impurity problem: 1.3× at
+β = 10, 17× at β = 200.
 
 Notes for running tests:
 - The G(τ) estimator built from M⁻¹ has a heavy-tailed distribution in these models, for stock and
