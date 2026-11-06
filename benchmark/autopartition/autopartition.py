@@ -1,0 +1,107 @@
+#!/bin/env python
+
+import time
+from triqs.gfs import iOmega_n, inverse
+from triqs.operators import *
+from triqs.operators.util.op_struct import set_operator_structure, get_mkind
+from triqs.operators.util.U_matrix import U_matrix
+from triqs.operators.util.hamiltonians import h_int_kanamori, h_int_slater
+from triqs_cthyb import *
+import numpy as np
+
+spin_names = ("up","dn")
+
+def partition(h_int,h_k,gf_struct,QN=None):
+    p = {}
+    p["verbosity"] = 0
+    p["max_time"] = -1
+    p["length_cycle"] = 1
+    p["n_warmup_cycles"] = 0
+    p["n_cycles"] = 0
+
+    if QN is None:
+        p['partition_method'] = "autopartition"
+    else:
+        p['partition_method'] = "quantum_numbers"
+        p['quantum_numbers'] = QN
+
+    S = SolverCore(beta=1, gf_struct=gf_struct)
+    S.G0_iw << inverse(iOmega_n - h_k)
+
+    start = time.clock()
+    S.solve(h_int=h_int,**p)
+    end = time.clock()
+
+    return S.h_loc_diagonalization, end-start
+
+table_format = ("%40s "+"%20s "*3)
+print(table_format % ("Model","Dimension of HS","Quantum numbers","Autopartition"))
+print(table_format % ("=====","===============","===============","============="))
+
+def print_line(model,hs_size,qn,ap):
+    print(table_format % (model,hs_size,"%i (%.3f sec)" % qn,"%i (%.3f sec)" % ap))
+
+### Kanamori Hamiltonians
+def run_kanamori(max_orbitals,orbital_mixing):
+    for n_orb in range(2,max_orbitals+1):
+        gf_struct = set_operator_structure(spin_names,n_orb,True)
+        mkind = get_mkind(True,None)
+
+        U = 1.0*(np.ones((n_orb,n_orb))-np.eye(n_orb))
+        Up = 2.0*np.ones((n_orb,n_orb))
+        J = 0.2
+        V = 0.3
+
+        h_k = V*np.ones((n_orb,n_orb)) if orbital_mixing else V*np.eye(n_orb)
+        h_int = h_int_kanamori(spin_names,n_orb,U,Up,J,off_diag=True)
+
+        # Quantum numbers
+        QN = [sum([n(*mkind("up",o)) for o in range(n_orb)],Operator()),   # N_up
+              sum([n(*mkind("dn",o)) for o in range(n_orb)],Operator())]   # N_down
+        if not orbital_mixing:
+            # PS quantum number
+            QN.append(Operator())
+            for i in range(n_orb):
+                dn = n(*mkind("up",i)) - n(*mkind("dn",i))
+                QN[2] += (2**i)*dn*dn
+
+        eig_qn,time_qn = partition(h_int,h_k,gf_struct,QN)
+        eig_ap,time_ap = partition(h_int,h_k,gf_struct)
+
+        model = "Kanamori, %i orbitals"%n_orb
+        if orbital_mixing: model += " (orbital mixing)"
+        print_line(model,2**(2*n_orb),(eig_qn.n_subspaces,time_qn),(eig_ap.n_subspaces,time_ap))
+
+### Slater Hamiltonians
+def run_slater(L,is_cubic):
+    for l in L:
+        n_orb = 2*l+1
+        gf_struct = set_operator_structure(spin_names,n_orb,True)
+        mkind = get_mkind(True,None)
+
+        F = [3.0*(0.3**k) for k in range(l+1)]
+
+        U_mat = U_matrix(l,F,basis='cubic' if is_cubic else 'spherical')
+        h_int = h_int_slater(spin_names,n_orb,U_mat,True)
+
+        h_k = np.zeros((n_orb,n_orb))
+
+        # Quantum numbers
+        QN = [sum([n(*mkind("up",o)) for o in range(n_orb)],Operator()),   # N_up
+              sum([n(*mkind("dn",o)) for o in range(n_orb)],Operator())]   # N_down
+
+        eig_qn,time_qn = partition(h_int,h_k,gf_struct,QN)
+        eig_ap,time_ap = partition(h_int,h_k,gf_struct)
+
+        model = "Slater, %i orbitals"%n_orb
+        model += (" (cubic basis)" if is_cubic else " (spherical basis)")
+        print_line(model,2**(2*n_orb),(eig_qn.n_subspaces,time_qn),(eig_ap.n_subspaces,time_ap))
+
+print()
+run_kanamori(7,False)
+print()
+run_kanamori(7,True)
+print()
+run_slater([2,3],False)
+print()
+run_slater([2,3],True)
