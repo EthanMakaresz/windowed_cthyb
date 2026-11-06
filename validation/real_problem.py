@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """Stock vs windowed mode on a single-orbital Hubbard impurity given by Delta(tau) and h_loc0
-(Delta interface, as solve_generic uses it), e.g. the U = 15, beta = 40 first-iteration problems of
-window_test (diag_mu*_delta.h5, keys Delta_tau, h_loc0, U, beta).
+(Delta interface, as solve_generic uses it). The HDF5 file holds the keys Delta_tau, h_loc0, U and beta,
+e.g. the Delta(tau) of a first DMFT iteration.
 
     python validation/real_problem.py DELTA.h5 [--seeds 4] [--moves 2e7] [--jobs 11] [--w 1.5]
 

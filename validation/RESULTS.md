@@ -58,7 +58,9 @@ stock may pick the same c† or c twice and then rejects. Its proposal ratio is 
 (sβ/(n+2))⁴, while the windowed one is s⁴β⁴/((n+2)²(n+1)²). Both are correct, and the windowed one
 accepts more often.
 
-## Real problem (`real_problem.py`, U = 15, β = 40, μ = 7, window_test's `diag_mu7_delta.h5`)
+## Real problem (`real_problem.py`, single-orbital Hubbard impurity, U = 15, β = 40, μ = 7)
+
+The Δ(τ) and h_loc0 are those of a first DMFT iteration (`diag_mu7_delta.h5`, not included).
 
 24 seeds per move set, 2·10⁷ moves each. Observables are compared with stock;
 `auto_corr_time` is cthyb's (sign and perturbation order, in cycles of 100 moves).

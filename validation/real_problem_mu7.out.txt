@@ -1,4 +1,4 @@
-/home/ethan/phd/benchmark_resubmission/dmft/window_test/diag_mu7_delta.h5: 24 seeds x 2.0e+07 moves (+10% warmup); W: w = 1.5; W_half: w = beta/2, d_min = 0
+diag_mu7_delta.h5: 24 seeds x 2.0e+07 moves (+10% warmup); W: w = 1.5; W_half: w = beta/2, d_min = 0
   stock    k 11.34031+-0.01717 (z +0.0)  occ 0.99971+-0.00047 (z +0.0)  docc 0.00962+-0.00033 (z +0.0)
            1.071 us/move, autocorr 82.8 cycles, cost/indep. sample 88.7 (arb.), acceptance Insert two: 0.0094, Remove two: 0.0094, Insert four: 0.0002, Remove four: 0.0002
   W        k 11.32581+-0.00604 (z -0.8)  occ 0.99972+-0.00015 (z +0.0)  docc 0.00959+-0.00011 (z -0.1)

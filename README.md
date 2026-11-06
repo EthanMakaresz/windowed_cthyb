@@ -193,7 +193,8 @@ trace with `rng.preview()`, accept and reject. The window bookkeeping is designe
 - No histograms are filled. The same-block 4-path sum reuses the counts and arcs that the move
   already has.
 
-**Measured** on the U = 15, β = 40 single-orbital problem of `window_test` (μ = 7, ⟨k⟩ ≈ 11).
+**Measured** on a single-orbital Hubbard impurity, U = 15, β = 40, μ = 7, ⟨k⟩ ≈ 11 (the Δ(τ) of a
+first DMFT iteration).
 Instructions and cycles per move are from `perf stat`, with one BLAS thread:
 
 | move set | instructions / move | cycles / move | vs stock |
@@ -236,8 +237,8 @@ ctest, run with `ctest --test-dir build`:
 
 `validation/validate_windowed.py` is a longer run with several move-set variants. It checks χ² against
 ED, the per-sub-move flux balance and the acceptance, and measures the time per proposal.
-`validation/real_problem.py` runs stock and windowed mode side by side on a Δ(τ) file (the U = 15,
-β = 40 problems of `window_test`). The results of both are in
+`validation/real_problem.py` runs stock and windowed mode side by side on a Δ(τ) file, here a
+single-orbital Hubbard impurity with U = 15, β = 40. The results of both are in
 [`validation/RESULTS.md`](validation/RESULTS.md). In short: every windowed variant agrees with ED,
 and on the U = 15 problem, w = 1.5 is 8.9× cheaper per independent sample than stock.
 
@@ -272,19 +273,6 @@ Use the same compiler and the same `Hybridisation_is_complex` / `Local_hamiltoni
 options as the TRIQS build. The Python bindings (`python/triqs_cthyb/solver_core.wrap.cxx`) were
 edited by hand for the new parameters. Do not configure with `-DUpdate_Python_Bindings=ON` unless
 clair is available; it regenerates them from the C++ headers.
-
-## Differences from the earlier `window_test/cthyb_patch`
-
-| | earlier patch | this fork |
-|---|---|---|
-| switch | `move_window > 0` adds windowed moves *next to* the stock ones (weight `move_window_weight`) | `windowed_moves=True` *replaces* them; stock is the default |
-| 2-operator window | `move_window`, no default | `window_half_width`, default β/20 with a warning |
-| 4-operator moves | window w within pairs, window W between the pairs' c† | window w4 (default w) within pairs; same block: c† farther apart than d_min (default β/4); different blocks: second pair uniform |
-| analysis | `window_analysis` module, histograms | removed |
-| geometry | floating-point distances, edge proposals rejected, O(n) counts with a vector of candidates | integer grid, exact window sets, O(log n) arc searches, no allocation |
-
-Old scripts that pass `move_window`, `move_window_pairs` or `move_window_weight` fail with an unknown
-parameter error, so they cannot silently switch behaviour.
 
 ---
 
