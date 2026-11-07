@@ -159,6 +159,8 @@ static int synth_constructor_1(PyObject *self, PyObject *args, PyObject *kwargs)
   de("window_half_width", self_c.window_half_width, true);
   de("window_double_half_width", self_c.window_double_half_width, true);
   de("window_double_min_distance", self_c.window_double_min_distance, true);
+  de("measure_G_auto_corr_time", self_c.measure_G_auto_corr_time, true);
+  de("G_auto_corr_window", self_c.G_auto_corr_window, true);
   de("use_trace_estimator", self_c.use_trace_estimator, true);
   de("measure_G_tau", self_c.measure_G_tau, true);
   de("measure_G_l", self_c.measure_G_l, true);
@@ -320,6 +322,10 @@ window_double_half_width : {par_54}, default={}
 
 window_double_min_distance : {par_55}, default={}
 
+measure_G_auto_corr_time : {par_56}, default=false
+
+G_auto_corr_window : {par_57}, default=0.1
+
 )DOC",
                       "par",
                       {c2py::python_typename<triqs_cthyb::many_body_op_t>(),
@@ -377,7 +383,9 @@ window_double_min_distance : {par_55}, default={}
                        c2py::python_typename<bool>(),
                        c2py::python_typename<std::optional<double>>(),
                        c2py::python_typename<std::optional<double>>(),
-                       c2py::python_typename<std::optional<double>>()});
+                       c2py::python_typename<std::optional<double>>(),
+                       c2py::python_typename<bool>(),
+                       c2py::python_typename<double>()});
 
 // ----- Method table ----
 template <>
@@ -442,6 +450,8 @@ constexpr auto _c2py_doc_member_windowed_moves = R"DOC(Windowed mode: replace th
 constexpr auto _c2py_doc_member_window_half_width = R"DOC(Windowed mode: half-width w of the window in which the c of an inserted pair is proposed around its c^dagger. Unset: beta/20 (with a warning).)DOC";
 constexpr auto _c2py_doc_member_window_double_half_width = R"DOC(Windowed mode: half-width of the window within each pair of the four-operator moves. Unset: window_half_width.)DOC";
 constexpr auto _c2py_doc_member_window_double_min_distance = R"DOC(Windowed mode: minimum distance between the two c^dagger of a four-operator move within one block. Unset: beta/4.)DOC";
+constexpr auto _c2py_doc_member_measure_G_auto_corr_time = R"DOC(Measure the autocorrelation time of G(tau) averaged over a window around beta/2, per block and diagonal element (G_auto_corr_time)?)DOC";
+constexpr auto _c2py_doc_member_G_auto_corr_window = R"DOC(Width of the window of measure_G_auto_corr_time, as a fraction of beta, centred on beta/2.)DOC";
 constexpr auto _c2py_doc_member_57 = R"DOC(Quadratic part of the local Hamiltonian. Must be provided if the :math:`\Delta` interface is used.)DOC";
 static PyObject *prop_get_dict_1(PyObject *self, void *) {
   auto &self_c = *(((c2py::wrap<_c2py_cls_1> *)self)->_c);
@@ -464,6 +474,8 @@ static PyObject *prop_get_dict_1(PyObject *self, void *) {
   dic["window_half_width"] = self_c.window_half_width;
   dic["window_double_half_width"] = self_c.window_double_half_width;
   dic["window_double_min_distance"] = self_c.window_double_min_distance;
+  dic["measure_G_auto_corr_time"] = self_c.measure_G_auto_corr_time;
+  dic["G_auto_corr_window"] = self_c.G_auto_corr_window;
   dic["use_trace_estimator"]           = self_c.use_trace_estimator;
   dic["measure_G_tau"]                 = self_c.measure_G_tau;
   dic["measure_G_l"]                   = self_c.measure_G_l;
@@ -565,6 +577,8 @@ constinit PyGetSetDef c2py::tp_getset<_c2py_cls_1>[] = {
    c2py::getsetdef_from_member<&_c2py_cls_1::window_half_width, _c2py_cls_1>("window_half_width", _c2py_doc_member_window_half_width),
    c2py::getsetdef_from_member<&_c2py_cls_1::window_double_half_width, _c2py_cls_1>("window_double_half_width", _c2py_doc_member_window_double_half_width),
    c2py::getsetdef_from_member<&_c2py_cls_1::window_double_min_distance, _c2py_cls_1>("window_double_min_distance", _c2py_doc_member_window_double_min_distance),
+   c2py::getsetdef_from_member<&_c2py_cls_1::measure_G_auto_corr_time, _c2py_cls_1>("measure_G_auto_corr_time", _c2py_doc_member_measure_G_auto_corr_time),
+   c2py::getsetdef_from_member<&_c2py_cls_1::G_auto_corr_window, _c2py_cls_1>("G_auto_corr_window", _c2py_doc_member_G_auto_corr_window),
    {"__dict__", (getter)prop_get_dict_1, nullptr, "", nullptr},
    {nullptr, nullptr, nullptr, nullptr, nullptr}};
 
@@ -647,6 +661,9 @@ static constexpr auto prop_doc_14 = R"DOC(Parameters used in the last solve.)DOC
 static constexpr auto prop_doc_15 = R"DOC(Is the solver compiled with support for a complex local Hamiltonian?)DOC";
 static constexpr auto prop_doc_16 = R"DOC(Histograms related to the performance analysis.)DOC";
 static constexpr auto prop_doc_17 = R"DOC(Status of the solve on exit.)DOC";
+static constexpr auto prop_doc_G_auto_corr_time = R"DOC(With measure_G_auto_corr_time: auto-correlation time, in units of MC cycles, of G(tau) averaged over the window around beta/2, {block: [per diagonal element]}.)DOC";
+static constexpr auto prop_doc_G_auto_corr_time_converged = R"DOC(With measure_G_auto_corr_time: whether each G_auto_corr_time saturated (1) or is only a lower bound (0).)DOC";
+static constexpr auto prop_doc_G_auto_corr_mean = R"DOC(With measure_G_auto_corr_time: G(tau) averaged over the window, from the same samples (a check against G_tau).)DOC";
 
 // ----- Member and property table ----
 
@@ -675,6 +692,12 @@ constinit PyGetSetDef c2py::tp_getset<_c2py_cls_2>[] = {
    {"G0_iw", c2py::getter_from_method<c2py::castm<>(&triqs_cthyb::solver_core::G0_iw)>, nullptr, prop_doc_2, nullptr},
    {"auto_corr_time", c2py::getter_from_method<c2py::castmc<>(&triqs_cthyb::solver_core::auto_corr_time)>, nullptr, prop_doc_3, nullptr},
    {"auto_corr_time_converged", c2py::getter_from_method<c2py::castmc<>(&triqs_cthyb::solver_core::auto_corr_time_converged)>, nullptr, prop_doc_4,
+    nullptr},
+   {"G_auto_corr_time", c2py::getter_from_method<c2py::castmc<>(&triqs_cthyb::solver_core::G_auto_corr_time)>, nullptr, prop_doc_G_auto_corr_time,
+    nullptr},
+   {"G_auto_corr_time_converged", c2py::getter_from_method<c2py::castmc<>(&triqs_cthyb::solver_core::G_auto_corr_time_converged)>, nullptr,
+    prop_doc_G_auto_corr_time_converged, nullptr},
+   {"G_auto_corr_mean", c2py::getter_from_method<c2py::castmc<>(&triqs_cthyb::solver_core::G_auto_corr_mean)>, nullptr, prop_doc_G_auto_corr_mean,
     nullptr},
    {"average_order", c2py::getter_from_method<c2py::castmc<>(&triqs_cthyb::solver_core::average_order)>, nullptr, prop_doc_5, nullptr},
    {"average_sign", c2py::getter_from_method<c2py::castmc<>(&triqs_cthyb::solver_core::average_sign)>, nullptr, prop_doc_6, nullptr},

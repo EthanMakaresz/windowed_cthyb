@@ -29,6 +29,7 @@
 #include <triqs/atom_diag/functions.hpp>
 #include <triqs/utility/macros.hpp>
 #include <optional>
+#include <map>
 
 #include "types.hpp"
 #include "container_set.hpp"
@@ -55,6 +56,9 @@ namespace triqs_cthyb {
     double _average_order;                            // average perturbation order
     double _auto_corr_time;                           // Auto-correlation time in units of MC cycles
     bool _auto_corr_time_converged = true;            // Whether the auto-correlation time estimate has saturated
+    std::map<std::string, std::vector<double>> _G_auto_corr_time;       // measure_G_auto_corr_time: tau per block, diagonal element
+    std::map<std::string, std::vector<int>> _G_auto_corr_time_converged; // ... whether it saturated (1) or is a lower bound (0)
+    std::map<std::string, std::vector<double>> _G_auto_corr_mean;       // ... and the window average of G(tau) it was measured on
     int _solve_status;                                // Status of the solve upon exit: 0 for clean termination, > 0 otherwise.
     std::optional<configuration> _last_configuration; // Final configuration of the run
 
@@ -146,6 +150,15 @@ namespace triqs_cthyb {
     /// Whether the auto-correlation time estimate has saturated (false: it is only a lower bound, run longer).
     bool auto_corr_time_converged() const { return _auto_corr_time_converged; }
 
+    /// With measure_G_auto_corr_time: auto-correlation time, in units of MC cycles, of G(tau) averaged over the window around beta/2, {block: [per diagonal element]}.
+    std::map<std::string, std::vector<double>> G_auto_corr_time() const { return _G_auto_corr_time; }
+
+    /// With measure_G_auto_corr_time: whether each G_auto_corr_time saturated (1) or is only a lower bound (0).
+    std::map<std::string, std::vector<int>> G_auto_corr_time_converged() const { return _G_auto_corr_time_converged; }
+
+    /// With measure_G_auto_corr_time: G(tau) averaged over the window, from the same samples (a check against G_tau).
+    std::map<std::string, std::vector<double>> G_auto_corr_mean() const { return _G_auto_corr_mean; }
+
     /// Status of the solve on exit.
     int solve_status() const { return _solve_status; }
 
@@ -191,6 +204,11 @@ namespace triqs_cthyb {
       h5_write(grp, "average_order", s._average_order);
       h5_write(grp, "auto_corr_time", s._auto_corr_time);
       h5_write(grp, "auto_corr_time_converged", s._auto_corr_time_converged);
+      if (!s._G_auto_corr_time.empty()) {
+        h5_write(grp, "G_auto_corr_time", s._G_auto_corr_time);
+        h5_write(grp, "G_auto_corr_time_converged", s._G_auto_corr_time_converged);
+        h5_write(grp, "G_auto_corr_mean", s._G_auto_corr_mean);
+      }
       h5_write(grp, "solve_status", s._solve_status);
       h5_write(grp, "Delta_infty_vec", s.Delta_infty_vec);
     }
@@ -212,6 +230,9 @@ namespace triqs_cthyb {
       h5::try_read(grp, "average_order", s._average_order);
       h5::try_read(grp, "auto_corr_time", s._auto_corr_time);
       h5::try_read(grp, "auto_corr_time_converged", s._auto_corr_time_converged);
+      h5::try_read(grp, "G_auto_corr_time", s._G_auto_corr_time);
+      h5::try_read(grp, "G_auto_corr_time_converged", s._G_auto_corr_time_converged);
+      h5::try_read(grp, "G_auto_corr_mean", s._G_auto_corr_mean);
       h5::try_read(grp, "solve_status", s._solve_status);
       h5::try_read(grp, "Delta_infty_vec", s.Delta_infty_vec);
 

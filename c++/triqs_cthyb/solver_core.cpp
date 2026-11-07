@@ -48,6 +48,7 @@
 #include "./measures/average_sign.hpp"
 #include "./measures/average_order.hpp"
 #include "./measures/auto_corr_time.hpp"
+#include "./measures/G_auto_corr_time.hpp"
 #ifdef CTHYB_G2_NFFT
 #include "./measures/G2_tau.hpp"
 #include "./measures/G2_iw.hpp"
@@ -476,6 +477,18 @@ namespace triqs_cthyb {
     qmc.add_measure(measure_average_order{data, _average_order}, "Average order");
     qmc.add_measure(measure_auto_corr_time{data, _auto_corr_time, _auto_corr_time_converged}, "Auto-correlation time");
 
+    // Auto-correlation time of G(tau) around beta/2 (reads the configuration only: the chain is unchanged)
+    _G_auto_corr_time.clear();
+    _G_auto_corr_time_converged.clear();
+    _G_auto_corr_mean.clear();
+    if (params.measure_G_auto_corr_time) {
+      if (!(params.G_auto_corr_window > 0 && params.G_auto_corr_window <= 1))
+        TRIQS_RUNTIME_ERROR << "G_auto_corr_window = " << params.G_auto_corr_window << " must be in (0, 1] (a fraction of beta)";
+      qmc.add_measure(measure_G_auto_corr_time{data, gf_struct, params.G_auto_corr_window, _G_auto_corr_time, _G_auto_corr_time_converged,
+                                               _G_auto_corr_mean},
+                      "G auto-correlation time");
+    }
+
     // --------------------------------------------------------------------------
 
     // set the correct sign in case a user-provided initial configuration is used
@@ -506,6 +519,12 @@ namespace triqs_cthyb {
         std::cout << "Auto-correlation time: " << _auto_corr_time << " cycles" << std::endl;
       else
         std::cout << "Auto-correlation time: >~ " << _auto_corr_time << " cycles (not converged, run longer)" << std::endl;
+      for (auto const &[name, taus] : _G_auto_corr_time) {
+        std::cout << "Auto-correlation time of G(beta/2 +- " << 0.5 * params.G_auto_corr_window << " beta), block " << name << ":";
+        for (size_t a = 0; a < taus.size(); ++a)
+          std::cout << " " << (_G_auto_corr_time_converged[name][a] ? "" : ">~ ") << taus[a];
+        std::cout << " cycles" << std::endl;
+      }
     }
 
     // Copy local (real or complex) G_tau back to complex G_tau

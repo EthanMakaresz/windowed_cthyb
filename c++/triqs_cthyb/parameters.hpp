@@ -119,6 +119,12 @@ namespace triqs_cthyb {
     /// Windowed mode: minimum distance between the two c^dagger of a four-operator move within one block. Unset: beta/4.
     std::optional<double> window_double_min_distance = {};
 
+    /// Measure the autocorrelation time of G(tau) averaged over a window around beta/2, per block and diagonal element (G_auto_corr_time)?
+    bool measure_G_auto_corr_time = false;
+
+    /// Width of the window of measure_G_auto_corr_time, as a fraction of beta, centred on beta/2.
+    double G_auto_corr_window = 0.1;
+
     /// Calculate the full trace or use an estimate?
     bool use_trace_estimator = false;
 

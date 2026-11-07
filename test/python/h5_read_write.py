@@ -62,5 +62,9 @@ for key in dir(solver_ref):
                 np.testing.assert_array_almost_equal(g1.data, g2.data)
         elif val == None or isinstance(val, list):
             assert(val == val_ref)
+        elif isinstance(val, dict):   # e.g. G_auto_corr_time: {block: array}
+            assert(sorted(val) == sorted(val_ref))
+            for k in val:
+                np.testing.assert_array_equal(val[k], val_ref[k])
         else:
             raise Exception("Invalid type in comparison")

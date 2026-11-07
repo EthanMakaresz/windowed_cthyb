@@ -84,6 +84,40 @@ To estimate w, run stock cthyb once with `performance_analysis=True` and look at
 Then compare the autocorrelation time per CPU second (`S.auto_corr_time`, wall time) for a few
 values of w. Windowed mode has no analysis tool of its own, and its moves fill no histograms.
 
+### Autocorrelation time of G(τ)
+
+`S.auto_corr_time` is measured on the sign and the perturbation order only. Short-pair moves can
+decorrelate those faster than the long-time structure of a configuration, which G(τ) near β/2
+depends on (see [`validation/speedup_sr2ruo4/`](validation/speedup_sr2ruo4/README.md)). The solve
+parameter `measure_G_auto_corr_time=True` also measures the autocorrelation time of G(τ) averaged
+over a window around β/2, for each block and diagonal element:
+
+```python
+S.solve(..., measure_G_auto_corr_time=True,
+        G_auto_corr_window=0.1)        # window width as a fraction of beta, centred on beta/2
+S.G_auto_corr_time                     # {block: [tau per diagonal element]}, in MC cycles
+S.G_auto_corr_time_converged           # {block: [1 if saturated, 0 if only a lower bound]}
+S.G_auto_corr_mean                     # {block: [G(tau) averaged over the window]}, a check against G_tau
+```
+
+| parameter | default | meaning |
+|---|---|---|
+| `measure_G_auto_corr_time` | `False` | Measure the autocorrelation time of G(τ) around β/2. |
+| `G_auto_corr_window` | `0.1` | Width of the window, as a fraction of β, centred on β/2. Must be in (0, 1]. |
+
+Once per cycle, the measure computes the instantaneous estimator of the `G_tau` measure, restricted
+to the c†–c pairs whose time difference lies in the window: −Σ s M / (β · window width), for each
+block and diagonal element. Its run average divided by the average sign is G(τ) averaged over the
+window (`G_auto_corr_mean`). Each series goes into its own log-binning accumulator, and τ is
+obtained with the same rule as `auto_corr_time`. That is the deepest bin level with at least 64
+effective samples, flagged as a lower bound if it still exceeds its finer neighbour by more than 2
+errors. The measure only reads the configuration and draws no random numbers, so the Markov chain
+and every other result are unchanged (bit-identical with the same seed). Its cost is one pass over
+each block's operator pairs per cycle. The results are stored in the solver's HDF5 group.
+
+The G(τ) estimator built from M⁻¹ has a heavy-tailed distribution (see *Tests and validation*). A
+wider window averages more pairs per sample, which makes the variance-based τ estimate steadier.
+
 ---
 
 ## The moves
@@ -240,6 +274,11 @@ ctest, run with `ctest --test-dir build`:
   orbital-off-diagonal hybridisation (2 blocks of size 2). The test compares, over 8 runs:
   occupations, double occupancies, the ⟨c†↑₀c↓₀c†↓₁c↑₁⟩ and ⟨c†↑₀c†↓₀c↓₁c↑₁⟩ correlators, and ⟨H_int⟩.
   These come from the impurity density matrix, which does not use M⁻¹.
+- `Py_G_auto_corr_time`: `measure_G_auto_corr_time` on the same kind of impurity (2 × 2 blocks),
+  with stock and with windowed moves. With the same seed, G_tau, the order and the sign are
+  bit-identical with the measure on and off. `G_auto_corr_mean` agrees with G_tau averaged over the
+  window. The results have one finite τ per diagonal element and round-trip through HDF5, and an
+  invalid window is refused. `Py_h5_read_write` also compares the new (dict) properties.
 
 `validation/validate_windowed.py` is a longer run with several move-set variants. It checks χ² against
 ED, the per-sub-move flux balance and the acceptance, and measures the time per proposal.

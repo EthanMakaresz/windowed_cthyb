@@ -102,6 +102,8 @@ namespace triqs_cthyb {
     h5_write(grp, "window_half_width", sp.window_half_width);
     h5_write(grp, "window_double_half_width", sp.window_double_half_width);
     h5_write(grp, "window_double_min_distance", sp.window_double_min_distance);
+    h5_write(grp, "measure_G_auto_corr_time", sp.measure_G_auto_corr_time);
+    h5_write(grp, "G_auto_corr_window", sp.G_auto_corr_window);
     h5_write(grp, "use_trace_estimator", sp.use_trace_estimator);
 
     h5_write(grp, "measure_G_tau", sp.measure_G_tau);
@@ -173,6 +175,8 @@ namespace triqs_cthyb {
     h5::try_read(grp, "window_half_width", sp.window_half_width);
     h5::try_read(grp, "window_double_half_width", sp.window_double_half_width);
     h5::try_read(grp, "window_double_min_distance", sp.window_double_min_distance);
+    h5::try_read(grp, "measure_G_auto_corr_time", sp.measure_G_auto_corr_time);
+    h5::try_read(grp, "G_auto_corr_window", sp.G_auto_corr_window);
     h5_read(grp, "use_trace_estimator", sp.use_trace_estimator);
 
     h5_read(grp, "measure_G_tau", sp.measure_G_tau);
