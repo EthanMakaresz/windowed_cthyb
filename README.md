@@ -5,14 +5,14 @@ This is a fork of [TRIQS/cthyb](https://github.com/TRIQS/cthyb), branch `4.0.x` 
 propose the c and c† of each pair close together in imaginary time. With the default parameters the
 solver is stock cthyb 4.0.1: same move set, same random-number stream, bit-identical results.
 
-Two commits on branch `windowed-moves`, on top of upstream `4.0.x`:
+The fork adds two changes on top of upstream `4.0.x`:
 
 1. **Σ₁ tail fix**, from [TRIQS/cthyb#197](https://github.com/TRIQS/cthyb/pull/197) (not merged
    upstream when this was written). `sigma_high_frequency_moments` subtracted the element-wise
    square of Σ₀ from Σ₁; the correct term is the matrix product Σ₀Σ₀. This matters for blocks where
    Σ₀ has off-diagonal elements, used as known moments in `solve_generic` tail fits. Its ED test is
-   `test/python/sigma_moments_offdiag.py`. Revert this commit once a 4.0.x release contains the fix.
-2. **Windowed moves**, described below.
+   `test/python/sigma_moments_offdiag.py`. Revert this commit (`7e9174f`) once a 4.0.x release contains the fix.
+2. **Windowed moves** (`92c2aa8`), described below.
 
 **How much faster than stock?** On a realistic three-orbital Kanamori problem (the t2g bands of
 Sr2RuO4, with spin-flip and pair hopping), windowed mode cuts the CPU time per independent sample of
@@ -286,7 +286,7 @@ To keep a stock cthyb next to it, use a separate `$PREFIX`. If you leave out
 ```bash
 source $TRIQS_PREFIX/share/triqs/triqsvars.sh          # sets TRIQS_ROOT, CMAKE_PREFIX_PATH, PYTHONPATH
 
-git clone -b windowed-moves <url of this repository> cthyb.src
+git clone <url of this repository> cthyb.src             # branch main
 cmake -S cthyb.src -B cthyb.build \
       -DCMAKE_BUILD_TYPE=Release \
       -DCMAKE_CXX_COMPILER=<the compiler TRIQS was built with> \

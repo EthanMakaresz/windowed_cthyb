@@ -1,6 +1,6 @@
 # Validation results
 
-All on the final code of branch `windowed-moves`. Raw outputs: `validate_windowed.out.txt`
+All on the code of commit `2f5702b` (on `main`). Raw outputs: `validate_windowed.out.txt`
 and `real_problem_mu7.out.txt`.
 
 ## Exact diagonalisation (`validate_windowed.py --seeds 32 --seed0 9001`)
