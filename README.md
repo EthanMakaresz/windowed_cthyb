@@ -15,10 +15,13 @@ Two commits on branch `windowed-moves`, on top of upstream `4.0.x`:
 2. **Windowed moves**, described below.
 
 **How much faster than stock?** On a realistic three-orbital Kanamori problem (the t2g bands of
-Sr2RuO4, with spin-flip and pair hopping), windowed mode cuts the CPU time per independent sample by
-1.3× at β = 10 and 17× at β = 200, the gain growing as ≈ β^0.9, with the cost per move included.
-See [`validation/speedup_sr2ruo4/`](validation/speedup_sr2ruo4/README.md) for the plot, the model,
-the method and the caveats; measured on G(β/2) directly, the gain is smaller (≈ 5–12× at β = 200).
+Sr2RuO4, with spin-flip and pair hopping), windowed mode cuts the CPU time per independent sample of
+G(β/2) by 5.4–5.6× at β = 200 (at most 8× for the xy-like orbital), with the cost per move included.
+The gain grows as ≈ β^0.7–0.8. It is below 1 up to β = 20 and above 1 from β = 40.
+On the sign and the perturbation order, the quantities that `auto_corr_time` measures, the gain is
+two to three times larger (16.5× at β = 200). See
+[`validation/speedup_sr2ruo4/`](validation/speedup_sr2ruo4/README.md) for the plot, the model, the
+method and the caveats.
 
 ---
 
@@ -83,6 +86,10 @@ To estimate w, run stock cthyb once with `performance_analysis=True` and look at
 `insert_length_accepted_<block>` (τ_c − τ_c† mod β, so short pairs sit near both 0 and β).
 Then compare the autocorrelation time per CPU second (`S.auto_corr_time`, wall time) for a few
 values of w. Windowed mode has no analysis tool of its own, and its moves fill no histograms.
+`auto_corr_time` covers only the sign and the perturbation order. G(τ) can decorrelate more slowly:
+on Sr2RuO4 its gain over stock was two to four times smaller at β ≥ 70 (`validation/speedup_sr2ruo4/`). Judge
+w on G(τ) itself where possible, for example with `measure_G_auto_corr_time` from the branch
+`g-auto-corr-time`.
 
 ---
 
@@ -216,8 +223,10 @@ moves add more, for two reasons. First, their counts (four arcs, same block). Se
 same-block 4-op removal returns at once, with no work, when it picks the same c† or c twice
 (about a third of the time at n ≈ 6), while the windowed one never wastes a proposal that way.
 With a real window (w = 1.5), a move costs 34% more cycles, because 10× more proposals pass the
-quick-abandon test and get full det and trace updates. The cost per independent sample is still
-**8× lower than stock** (see `validation/RESULTS.md`).
+quick-abandon test and get full det and trace updates. The cost per independent sample of the sign
+and the perturbation order (`auto_corr_time`) is still **8× lower than stock** (see
+`validation/RESULTS.md`). For G(τ) the gain can be smaller. On Sr2RuO4 it was a quarter to a half of
+the sign/order gain at β ≥ 70 (see `validation/speedup_sr2ruo4/`).
 
 ---
 
@@ -246,10 +255,12 @@ ED, the per-sub-move flux balance and the acceptance, and measures the time per 
 `validation/real_problem.py` runs stock and windowed mode side by side on a Δ(τ) file, here a
 single-orbital Hubbard impurity with U = 15, β = 40. The results of both are in
 [`validation/RESULTS.md`](validation/RESULTS.md). In short: every windowed variant agrees with ED,
-and on the U = 15 problem, w = 1.5 is 8.9× cheaper per independent sample than stock.
+and on the U = 15 problem, w = 1.5 is 8.9× cheaper than stock per independent sample of the sign and
+the order.
 [`validation/speedup_sr2ruo4/`](validation/speedup_sr2ruo4/README.md) measures the speedup over
-stock against temperature, β = 10 … 200, on a three-orbital Sr2RuO4 impurity problem: 1.3× at
-β = 10, 17× at β = 200.
+stock against temperature, β = 10 … 200, on a three-orbital Sr2RuO4 impurity problem. Measured on
+G(β/2), it rises from below 1 at β ≤ 20 to 5.4–5.6× at β = 200 (at most 8× for the xy-like orbital).
+Measured on the sign and the order, it rises from 1.6× to 16.5×.
 
 Notes for running tests:
 - The G(τ) estimator built from M⁻¹ has a heavy-tailed distribution in these models, for stock and

@@ -81,6 +81,11 @@ Cost, from `perf stat` (user-space instructions and cycles per move, one solve o
 | stock, no 4-op | 6103 | 2769 | – |
 | W_half, no 4-op | 6173 (+1.1%) | 2828 (+2.2%) | – |
 
+The 8.9× is per independent sample of the sign and the perturbation order, the quantities that
+`auto_corr_time` covers. G(τ) was not measured here. On the Sr2RuO4 problem
+(`speedup_sr2ruo4/`), the gain on G(β/2) was two to four times smaller than on the sign and the
+order at β ≥ 70.
+
 With identical proposals, the windowed 2-operator moves cost 1–2% more per move. The rest of
 W_half's overhead is in the 4-operator moves, explained in the README's Overhead section. Wall-clock
 times per move set from mc_generic's timers vary by ±20% between identical runs on this machine,
